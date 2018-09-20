@@ -1,0 +1,91 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: kube-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: filebeat-test
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-log
+          mountPath: /var/log/nginx/
+      - name: filebeat
+        image: 192.168.210.10:8099/base/filebeat:6.3.0
+        volumeMounts:
+        - name: nginx-log
+          mountPath: /log/
+        - name: filebeat-config
+          mountPath: /etc/filebeat/
+      volumes:
+      - name: nginx-log
+        emptyDir: {}
+      - name: filebeat-config
+        configMap:             
+          name: filebeat-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-filebeat
+  namespace: kube-test
+  #annotations:
+    #prometheus.io/port: "80"
+    #prometheus.io/scrape: "true"
+    #prometheus.io/path: /prometheus
+    #service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    #service.beta.kubernetes.io/alicloud-loadbalancer-bandwidth: "-1"
+    #service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-xxx
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: filebeat-test
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-config
+  namespace: kube-test
+data:
+  filebeat.yml: |
+    filebeat.prospectors:
+    - type: log
+      enabled: true
+      paths:
+        - /log/*.log
+    filebeat.config.modules:
+      path: ${path.config}/modules.d/*.yml
+      reload.enabled: false
+    setup.template.settings:
+      index.number_of_shards: 3
+    output.kafka:
+      hosts: ["192.168.104.191:9092","192.168.104.192:9092","192.168.104.193:9092","192.168.104.224:9092","192.168.104.225:9092"]
+      topic: "mp-sre-wufeiqun"
+      required_acks: 1
+      compression: gzip
+      max_message_bytes: 1000000
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: nginx
+  namespace: sre
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: nginx-deployment 
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 40

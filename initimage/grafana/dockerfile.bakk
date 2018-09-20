@@ -1,0 +1,5 @@
+FROM 192.168.210.10:8099/base/centos:7.4
+RUN mkdir /data
+COPY grafana-5.2.2-1.x86_64.rpm /root/
+RUN yum -y localinstall /root/grafana-5.2.2-1.x86_64.rpm 
+#CMD ["/root/grafana/bin/grafana-server","-homepath","/root/grafana"]

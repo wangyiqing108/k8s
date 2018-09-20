@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: php-test
+  namespace: ops
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: php-test
+    spec:
+      containers:
+      - name: php-test
+        image: hub.bbobo.com/base/centos_7.4_php7.1:pkgdown
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: SERVER_NAME
+          value: "hello" 

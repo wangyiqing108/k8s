@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/path: /prometheus
+    prometheus.io/port: "8078"
+    prometheus.io/scrape: "true"
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zehz1tprlvvr4ttuqkuf
+  labels:
+    app: mp-sre-wangyiqing
+  name: mp-sre-wangyiqing
+  namespace: ops
+spec:
+  ports:
+  - name: tcp-80
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: mp-sre-wufeiqun
+  sessionAffinity: None
+  type: LoadBalancer

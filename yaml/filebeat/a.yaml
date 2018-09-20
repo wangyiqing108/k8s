@@ -1,0 +1,53 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: kube-test
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: filebeat-test
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-log
+          mountPath: /var/log/nginx/
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 1
+      - name: filebeat
+        image: 192.168.210.10:8099/base/filebeat:6.3.0
+        volumeMounts:
+        - name: nginx-log
+          mountPath: /log/
+        - name: filebeat-config
+          mountPath: /etc/filebeat/
+      volumes:
+      - name: nginx-log
+        emptyDir: {}
+      - name: filebeat-config
+        configMap:             
+          name: filebeat-config

@@ -1,0 +1,12 @@
+FROM 192.168.210.10:8099/base/centos:7.4
+RUN mkdir -p /root/grafana
+COPY grafana-5.2.2 /root/grafana
+#RUN mkdir -p /etc/grafana/provisioning
+#RUN mkdir -p /var/lib/grafana
+#COPY grafana-5.2.2/bin/grafana-server /usr/local/bin
+#COPY grafana-5.2.2/bin/grafana-cli /usr/local/bin
+#COPY grafana.ini /etc/grafana/
+#COPY ldap.toml /etc/grafana/ 
+#COPY grafana-5.2.2/conf/provisioning /etc/grafana/provisioning
+WORKDIR /root/grafana
+CMD ["/root/grafana/bin/grafana-server","-homepath","/root/grafana"]

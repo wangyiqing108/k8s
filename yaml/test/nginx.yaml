@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: ops
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx:latest
+        ports:
+        - containerPort: 80
+        #env:
+        #- name: SERVER_NAME
+        #  value: "hello" 
+        #volumeMounts:
+        #- name: disk-pvc
+        #  mountPath: "/mnt"
+        #volumes:
+        #  - name: disk-pvc
+        #    persistentVolumeClaim:
+        #      claimName: disk-common
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myweb
+  namespace: ops
+  annotations:
+    service.beta.kubernetes.io/alicloud-loadbalancer-protocol-port: "tcp:80"
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    service.beta.kubernetes.io/alicloud-loadbalancer-bandwidth: "-1"
+    service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zea7uv2hie84rny0264q
+    service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: "true"
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: nginx

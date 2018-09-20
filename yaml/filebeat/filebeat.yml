@@ -1,0 +1,16 @@
+filebeat.prospectors:
+- type: log
+  enabled: true
+  paths:
+    - /log/*.log
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+setup.template.settings:
+  index.number_of_shards: 3
+output.kafka:
+  hosts: ["192.168.104.191:9092","192.168.104.192:9092","192.168.104.193:9092","192.168.104.224:9092","192.168.104.225:9092"]
+  topic: "mp-sre-wufeiqun"
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000

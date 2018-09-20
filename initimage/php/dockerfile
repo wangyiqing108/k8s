@@ -1,0 +1,9 @@
+FROM 192.168.210.10:8099/base/centos:7.4
+
+RUN groupadd git 
+RUN useradd git -g git
+RUN yum -y install freetype libxml2-devel libxml2 bzip2 bzip2-devel libjpeg-devel libpng libpng-devel libXpm-devel libmcrypt libmcrypt-devel
+COPY php /home/git/
+RUN chown -R git:git /home/git/php 
+ENV PATH=$PATH:/home/git/php/bin
+RUN sed -i '$a export PATH=$PATH:/home/git/php/bin' /etc/profile

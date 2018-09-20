@@ -1,0 +1,16 @@
+FROM docker.io/centos:7.4.1708
+
+RUN mkdir -p /root/software
+RUN mkdir -p /root/service
+RUN mkdir -p /root/log
+COPY limits.conf /etc/security/limits.conf
+COPY sysctl.conf  /etc/sysctl.conf
+COPY yum.repos.d /etc/yum.repos.d/
+#COPY node_exporter /root/
+#COPY agent.ini  /etc/supervisord.d/
+COPY jdk.rpm  /root/software/
+RUN yum update -y
+RUN yum -y   groupinstall 'Development tools'
+RUN yum install -y vim lsof gcc gcc-c++ make autoconf automake libtool make pcre-devel openssl-devel bison-devel patch unzip ncurses-devel zlib-devel bzip2-devel  wget readline-devel sqlite-devel telnet nc git htop psmisc net-tools
+RUN yum -y localinstall /root/software/jdk.rpm
+RUN rm -rf /root/software/jdk.rpm

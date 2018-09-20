@@ -1,0 +1,100 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  labels:
+    app: prometheus-wangyiqing
+  name: prometheus-wangyiqing
+  namespace: ops-monitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus-wangyiqing
+  #strategy:
+  #  rollingUpdate:
+  #    maxSurge: 1
+  #    maxUnavailable: 1
+  #  type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: prometheus-wangyiqing
+    spec:
+      containers:
+      #- args:
+        #- --config.file=/etc/config/prometheus.yml
+       # - --storage.tsdb.path=/data
+        #- --web.console.libraries=/etc/prometheus/console_libraries
+        #- --web.console.templates=/etc/prometheus/consoles
+        #- --web.enable-lifecycle
+      - image: hub.bbobo.com/base/prometheus:2.3.1
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /-/healthy
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        name: prometheus-wangyiqing
+        lifecycle:
+          postStart:
+            exec:
+              #command: ["/usr/bin/sed","-i","65s/\\.\\*/mp-sre-wufeiqun/","/etc/config/prometheus.yml"]
+              command:  ["/bin/sh","-c","change.sh mp-sre-wangyiqing ops"]
+              #command: ["/usr/bin/sed","-i","59s/\\.\\*/ops/","/etc/config/prometheus.yml"]
+              #command: ["echo","hello"]
+        env:
+        - name: KUBERNETES_SERVICE_HOST
+          value: "192.168.132.67"
+        - name: KUBERNETES_SERVICE_PORT
+          value: "6443"
+        ports:
+        - containerPort: 9090
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /-/ready
+            port: 9090
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        volumeMounts:
+        - mountPath: /data
+          name: prometheus-data
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      #initContainers:
+      #- name: init-prometheus
+      #  image: hub.bbobo.com/base/prometheus:2.3.1
+      #  command:
+      #  - sed
+      #  - "-i"
+      #  - 65s/\.\*/mp-sre-wufeiqun/
+      #  - /etc/config/prometheus.yml
+      volumes: 
+      - name: prometheus-data
+        hostPath: 
+          path: /data/prometheus/mp-sre-wangyiqing
+          type: DirectoryOrCreate 
+      nodeName: cn-beijing.i-2ze9ymgoq8jp13vnnn4g
+      #nodeSelector:
+      #  node: prometheus-server
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      #serviceAccount: wistful-goose-prometheus-server
+      #serviceAccountName: wistful-goose-prometheus-server
+      #serviceAccount: prometheus-server
+      #serviceAccountName: prometheus-serve
+      terminationGracePeriodSeconds: 300

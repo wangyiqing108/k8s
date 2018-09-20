@@ -1,0 +1,28 @@
+FROM docker.io/centos:7.4.1708
+
+RUN mkdir -p /root/software
+RUN mkdir -p /root/service
+RUN mkdir -p /root/log
+COPY limits.conf /etc/security/limits.conf
+COPY sysctl.conf  /etc/sysctl.conf
+COPY yum.repos.d /etc/
+#COPY node_exporter /root/
+#COPY agent.ini  /etc/supervisord.d/
+COPY jdk-8u151-linux-x64.rpm /root/software/
+COPY filebeat-6.3.1-x86_64.rpm /root/software/
+
+RUN yum -y install epel-release
+RUN yum -y install python-pip
+#RUN pip install flask -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN yum update -y
+RUN yum -y   groupinstall 'Development tools'
+RUN yum install -y vim lsof gcc gcc-c++ make autoconf automake libtool make pcre-devel openssl-devel bison-devel patch unzip ncurses-devel zlib-devel bzip2-devel  wget readline-devel sqlite-devel telnet nc git htop psmisc net-tools
+
+RUN yum -y install supervisor
+#RUN systemctl enable supervisord.service
+#RUN yum -y localinstall /root/software/jdk-8u151-linux-x64.rpm
+RUN yum -y localinstall /root/software/filebeat-6.3.1-x86_64.rpm
+#RUN sysctl -p /etc/sysctl.conf
+
+COPY supervisord.conf /etc/supervisord.conf
+#CMD ["/usr/bin/supervisord"]

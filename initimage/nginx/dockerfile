@@ -1,0 +1,7 @@
+FROM 192.168.210.10:8099/base/centos:7.4
+RUN  yum -y install nginx
+COPY nginx.conf /etc/nginx/
+COPY nginx.conf.template /etc/nginx/
+ENV SERVER_NAME="localhost"
+#CMD ['/bin/bash','c','/usr/sbin/nginx']
+CMD ["/bin/bash","-c","envsubst < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx"]

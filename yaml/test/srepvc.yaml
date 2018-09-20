@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: prometheus
+    chart: prometheus-6.10.0
+    component: server
+    heritage: Tiller
+    release: ulterior-jaguar
+  name: ulterior-jaguar-prometheus-server
+  namespace: sre
+  selfLink: /api/v1/namespaces/sre/persistentvolumeclaims/ulterior-jaguar-prometheus-server
+  uid: 06c55d95-9238-11e8-98f9-00163e32a062
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: sre-storage-class

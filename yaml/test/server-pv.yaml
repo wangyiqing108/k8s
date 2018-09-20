@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"name":"server-pv","namespace":""},"spec":{"accessModes":["ReadWriteOnce"],"capacity":{"storage":"5Gi"},"hostPath":{"path":"/data/server"},"persistentVolumeReclaimPolicy":"Recycle","storageClassName":"server-pv"}}
+    pv.kubernetes.io/bound-by-controller: "yes"
+  creationTimestamp: 2018-07-25T10:35:06Z
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: server-pv
+  resourceVersion: "123618"
+  selfLink: /api/v1/persistentvolumes/server-pv
+  uid: 65899dc1-8ff6-11e8-8928-00163e32a062
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 5Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: triangular-manatee-prometheus-server
+    namespace: monitor
+    resourceVersion: "123615"
+    uid: 656ec214-9000-11e8-8928-00163e32a062
+  hostPath:
+    path: /data/server
+    type: ""
+  persistentVolumeReclaimPolicy: Recycle
+  storageClassName: server-pv
+status:
+  phase: Bound
