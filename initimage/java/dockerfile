@@ -1,4 +1,4 @@
-FROM hub.bbobo.com/base/alpine-glibc:latest
+FROM /base/alpine-glibc:latest
 ADD jdk-8u171-linux-x64.tar.gz /usr/local
 RUN echo https://mirrors.aliyun.com/alpine/v3.7/main/ > /etc/apk/repositories && \
     echo https://mirrors.aliyun.com/alpine/v3.7/community/ >> /etc/apk/repositories

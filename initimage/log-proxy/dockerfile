@@ -1,4 +1,4 @@
-FROM hub.bbobo.com/base/alpine-glibc:latest
+FROM /base/alpine-glibc:latest
 ADD log-proxy /usr/local
 ADD config.json /usr/local
 CMD ["/usr/local/log-proxy","-c","/usr/local/config.json"]

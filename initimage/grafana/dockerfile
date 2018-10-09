@@ -1,4 +1,4 @@
-FROM 192.168.210.10:8099/base/centos:7.4
+FROM 192/base/centos:7.4
 RUN mkdir -p /root/grafana
 COPY grafana-5.2.2 /root/grafana
 #RUN mkdir -p /etc/grafana/provisioning

@@ -1,4 +1,4 @@
-FROM 192.168.210.10:8099/base/centos:7.4
+FROM /base/centos:7.4
 RUN mkdir /data
 RUN mkdir -p /etc/config/
 RUN mkdir -p /etc/prometheus/console_libraries
