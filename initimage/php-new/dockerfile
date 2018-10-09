@@ -1,6 +1,3 @@
-#FROM hub.bbobo.com/base/centos_7.4_php7.1
-#FROM hub.bbobo.com/base/centos_7.4_php7.1:test
-FROM hub.bbobo.com/base/centos_7.4_php7.1
 #ENV SERVER_NAME="_"
 #RUN /usr/bin/envsubst '$SERVER_NAME'< /home/git/nginx/conf.d/service.conf.template > /home/git/nginx/conf.d/service.conf
 COPY mp-pkgdown-v20180815205315-10 /home/git/service/
