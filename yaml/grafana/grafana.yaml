@@ -25,7 +25,7 @@ spec:
         app: grafana
     spec:
       containers:
-      - image: hub.bbobo.com/base/grafana:5.2.2
+      - image: /base/grafana:5.2.2
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
