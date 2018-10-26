@@ -56,13 +56,13 @@ scrape_configs:
     action: labelmap
   - source_labels: [__meta_kubernetes_namespace]
     separator: ;
-    regex: (ops)
+    regex: (k8snamespace)
     target_label: kubernetes_namespace
     replacement: $1
     action: replace
   - source_labels: [__meta_kubernetes_service_name]
     separator: ;
-    regex: (mp-sre-wufeiqun)
+    regex: (k8sservice)
     target_label: kubernetes_name
     replacement: $1
     action: replace
