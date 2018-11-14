@@ -1,11 +1,17 @@
 apiVersion: v1
 data:
   defaults.ini: |
+    [server]
+    #protocol = http
+    #http_addr =
+    #domain = localhost
+    #enforce_domain = false
+    #root_url = %(protocol)s://%(domain)s:%(http_port)s/
     [analytics]
     check_for_updates = true
     [auth.ldap]
     allow_sign_up = true
-    config_file = /root/grafana/confldap.toml
+    config_file = /root/grafana/conf/ldap.toml
     enabled = true
     [grafana_net]
     url = https://grafana.net

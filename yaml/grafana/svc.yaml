@@ -1,17 +1,19 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
-    service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zehz1tprlvvr4ttuqkuf
-  labels:
-    app: grafana
   name: grafana
   namespace: ops-monitor
+  annotations:
+    #service.beta.kubernetes.io/alicloud-loadbalancer-protocol-port: "http:3000"
+    service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
+    service.beta.kubernetes.io/alicloud-loadbalancer-bandwidth: "-1"
+    #service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zeeysdoyx1abukcvc4wv #生产
+    service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zew6ycoq6450o4xipnxh
+    service.beta.kubernetes.io/alicloud-loadbalancer-force-override-listeners: "true"
 spec:
   ports:
   - name: http
-    port: 80
+    port: 3000
     protocol: TCP
     targetPort: 3000
   selector:

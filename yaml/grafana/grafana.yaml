@@ -10,7 +10,7 @@ metadata:
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
-  #revisionHistoryLimit: 10
+  revisionHistoryLimit: 1
   selector:
     matchLabels:
       app: grafana
@@ -25,7 +25,7 @@ spec:
         app: grafana
     spec:
       containers:
-      - image: /base/grafana:5.2.2
+      - image: hub.bbobo.com/base/grafana:5.3.4
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
@@ -35,7 +35,7 @@ spec:
             scheme: HTTP
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 1
+          timeoutSeconds: 3
         name: grafana
         ports:
         #- containerPort: 80
@@ -50,14 +50,14 @@ spec:
             path: /api/health
             port: 3000
             scheme: HTTP
-          initialDelaySeconds: 60
+          initialDelaySeconds: 10
           periodSeconds: 10
           successThreshold: 1
-          timeoutSeconds: 30
+          timeoutSeconds: 3
         resources:
           limits:
             cpu: 4000m
-            memory: 5120Mi
+            memory: 4Gi
           requests:
             cpu: 2000m
             memory: 1024Mi
@@ -66,15 +66,18 @@ spec:
         volumeMounts:
         - mountPath: /root/grafana/data
           name: storage
-        - mountPath: /root/grafana/conf/grafana.ini
+        - mountPath: /root/grafana/conf/provisioning
+          name: provisioning
+        - mountPath: /root/grafana/conf/defaults.ini
           name: config
-          subPath: grafana.ini
+          subPath: defaults.ini
         - mountPath: /root/grafana/conf/ldap.toml
           name: ldap
           subPath: ldap.toml
       dnsPolicy: ClusterFirst
+      #nodeName: cn-beijing.i-2ze2wzpijgvf1h74wnyr
       nodeName: cn-beijing.i-2ze9ymgoq8jp13vnnn4g
-      #schedulerName: default-scheduler
+      schedulerName: default-scheduler
       #serviceAccount: grafana
       #serviceAccountName: grafana
       terminationGracePeriodSeconds: 30
@@ -82,6 +85,10 @@ spec:
       - name: storage
         hostPath:
           path: /data/grafana
+          type: DirectoryOrCreate
+      - name: provisioning
+        hostPath:
+          path: /data/grafana/conf/provisioning
           type: DirectoryOrCreate
       - configMap:
           #defaultMode: 0777
