@@ -36,7 +36,7 @@ spec:
             secretKeyRef:
               key: admin-password
               name: grafana
-        image: hub.bbobo.com/base/grafana:5.1.3
+        image: /base/grafana:5.1.3
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3
