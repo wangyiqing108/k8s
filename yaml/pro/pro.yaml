@@ -45,7 +45,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              #command: ["/usr/bin/sed","-i","65s/\\.\\*/mp-sre-wufeiqun/","/etc/config/prometheus.yml"]
+              #command: ["/usr/bin/sed","-i","65s/\\.\\*/mp-sre/","/etc/config/prometheus.yml"]
               command:  ["/bin/sh","-c","change.sh mp-sre-wangyiqing ops"]
               #command: ["/usr/bin/sed","-i","59s/\\.\\*/ops/","/etc/config/prometheus.yml"]
               #command: ["echo","hello"]
@@ -79,7 +79,7 @@ spec:
       #  command:
       #  - sed
       #  - "-i"
-      #  - 65s/\.\*/mp-sre-wufeiqun/
+      #  - 65s/\.\*/mp-sre-/
       #  - /etc/config/prometheus.yml
       volumes: 
       - name: prometheus-data

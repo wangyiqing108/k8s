@@ -5,8 +5,8 @@ metadata:
     service.beta.kubernetes.io/alicloud-loadbalancer-address-type: intranet
     service.beta.kubernetes.io/alicloud-loadbalancer-id: lb-2zehz1tprlvvr4ttuqkuf
   labels:
-    app: prometheus-wufeiqun
-  name: prometheus-wufeiqun
+    app: prometheus
+  name: prometheus
   namespace: ops
 spec:
   externalTrafficPolicy: Cluster
@@ -16,6 +16,6 @@ spec:
     protocol: TCP
     targetPort: 9090
   selector:
-    app: prometheus-wufeiqun
+    app: prometheus
   sessionAffinity: None
   type: LoadBalancer

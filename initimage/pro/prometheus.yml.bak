@@ -62,7 +62,7 @@ scrape_configs:
     action: replace
   - source_labels: [__meta_kubernetes_service_name]
     separator: ;
-    regex: (mp-sre-wufeiqun)
+    regex: (mp-sre-wangyiqing)
     target_label: kubernetes_name
     replacement: $1
     action: replace

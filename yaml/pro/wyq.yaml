@@ -18,6 +18,6 @@ spec:
     protocol: TCP
     targetPort: 80
   selector:
-    app: mp-sre-wufeiqun
+    app: mp-sre
   sessionAffinity: None
   type: LoadBalancer
