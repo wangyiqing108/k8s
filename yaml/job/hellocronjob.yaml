@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+ name: hello #Cronjob的名称
+spec:
+  schedule: "*/1 * * * *"   #job执行的周期，cron格式的字符串
+  jobTemplate:  #job模板
+    spec:   
+      template:
+      spec:
+        containers:
+        - name: hello-cronjob
+          image: hub/base/centos:7.4
+          command: ["bash","-c","date;echo  Hello from the Kubernetes cluste"] #job具体执行的任务
+          restartPolicy: OnFailure

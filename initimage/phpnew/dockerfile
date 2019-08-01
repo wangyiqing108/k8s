@@ -1,0 +1,11 @@
+#FROM hub/base/centos_7.4_php7.1
+#FROM hub/base/centos_7.4_php7.1:test
+FROM hub/base/centos_7.4_php7.1
+ENV app_env="Pro"
+COPY php.ini.template /home/git/php/lib/
+COPY rc.local /etc/rc.d/
+RUN chmod +x /etc/rc.d/rc.local
+RUN chown -R git:git /home/git/
+#RUN /usr/bin/envsubst '$SERVER_NAME'< /home/git/nginx/conf.d/service.conf.template > /home/git/nginx/conf.d/service.conf
+#COPY mp-pkgdown-v20180815205315-10 /home/git/service/
+CMD ["/etc/rc.d/rc.local"]

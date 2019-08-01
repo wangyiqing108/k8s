@@ -27,7 +27,7 @@ spec:
             topologyKey: kubernetes.io/hostname
       containers:
       - name: redis
-        image: hub.bbobo.com/ops/redis-cluster:3.2.10
+        image: hub/ops/redis-cluster:3.2.10
         command:
           - "redis-server"
         args:

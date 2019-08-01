@@ -1,0 +1,4 @@
+#FROM 192.168.210.10:8099/base/centos:7.4
+FROM hub.bbobo.com/base/centos_7.4_php_base:7.1
+RUN  yum -y install kde-l10n-Chinese && localedef -c -f UTF-8 -i zh_CN zh_CN.utf8
+ENV LANG="zh_CN.UTF-8"

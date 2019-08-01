@@ -1,0 +1,6 @@
+FROM hub/base/ubunut:latest
+COPY sources.list /etc/apt/
+RUN mkdir -p /root/data && mkdir -p /root/service && mkdir -p /root/log 
+RUN apt-get update
+RUN apt-get -y --force-yes install libboost-all-dev libboost-test-dev libboost-program-options-dev libboost-system-dev libboost-filesystem-dev libevent-dev automake libtool flex bison pkg-config g++ libssl-dev cmake libmysqlclient-dev vim telnet
+ENV LANG="zh_CN.UTF-8"

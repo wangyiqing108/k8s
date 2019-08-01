@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: php-test
-        image: hub.bbobo.com/base/centos_7.4_php7.1:pkgdown
+        image: hub/base/centos_7.4_php7.1:pkgdown
         imagePullPolicy: Always
         ports:
         - containerPort: 80

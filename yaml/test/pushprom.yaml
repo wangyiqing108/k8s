@@ -19,7 +19,7 @@ spec:
         effect: NoSchedule
       containers:
       - name: pushprom
-        image: hub.bbobo.com/base/pushprom:7.4
+        image: hub/base/pushprom:7.4
         ports:
           - name: metrics
             containerPort: 9091

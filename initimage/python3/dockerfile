@@ -1,0 +1,16 @@
+FROM docker.io/centos:7.4.1708
+
+RUN mkdir -p /root/software
+RUN mkdir -p /root/service
+RUN mkdir -p /root/log
+#RUN mkdir -P /root/.pip
+COPY limits.conf /etc/security/limits.conf
+COPY sysctl.conf  /etc/sysctl.conf
+COPY yum.repos.d /etc/yum.repos.d/
+COPY pip.conf /root/.pip/
+COPY python /usr/local/
+ENV PY_HOME=/usr/local/python3
+ENV PATH=$PATH:$PY_HOME/bin
+RUN sed -i '$a PY_HOME="/usr/local/python3"' /etc/profile
+RUN sed -i '$a PATH=$PATH:$PY_HOME/bin' /etc/profile
+RUN sed -i '$a export PATH' /etc/profile
