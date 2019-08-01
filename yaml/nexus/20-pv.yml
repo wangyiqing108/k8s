@@ -1,0 +1,18 @@
+{{ if index . "volume_name" }}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{.volume_name}}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 300Gi
+  flexVolume:
+    driver: alicloud/disk
+    fsType: ext4
+    options:
+      VolumeId: {{.volume_name}}
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: alicloud-disk-efficiency
+{{ end }}

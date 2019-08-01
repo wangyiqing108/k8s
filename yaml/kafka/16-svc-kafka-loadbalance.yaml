@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: kafka
+  name: kafka-svc-new
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: server
+    port: 9093
+    protocol: TCP
+    targetPort: 9093
+  selector:
+    app: kafka
+  sessionAffinity: None
+  type: LoadBalancer

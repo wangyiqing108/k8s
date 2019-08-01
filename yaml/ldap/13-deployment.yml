@@ -1,0 +1,94 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata: 
+  name: {{.name}}
+  labels: 
+    app: {{.name}}
+spec: 
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        app: {{.name}}
+    spec: 
+      volumes: 
+        - name: data
+          persistentVolumeClaim: 
+            claimName: {{.name}}
+      containers: 
+        - name: {{.name}}
+          image: "osixia/openldap:1.2.1"
+          ports: 
+            - name: app
+              containerPort: 389
+              protocol: TCP
+          env: 
+            - name: LDAP_DOMAIN
+              value: "ldap.zhansha.tv"
+            - name: LDAP_ADMIN_PASSWORD
+              value: admin
+          resources: 
+          volumeMounts: 
+            - name: data
+              mountPath: "/var/lib/ldap"
+              subPath: database
+            - name: data
+              mountPath: "/etc/ldap/slapd.d"
+              subPath: config
+          livenessProbe: 
+            tcpSocket: 
+              port: 389
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe: 
+            tcpSocket: 
+              port: 389
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          imagePullPolicy: IfNotPresent
+        - name: "{{.name}}-admin"
+          image: "osixia/phpldapadmin:0.7.1"
+          ports: 
+            - name: "app-admin"
+              containerPort: 80
+              protocol: TCP
+          env: 
+            - name: PHPLDAPADMIN_LDAP_HOSTS
+              value: "127.0.0.1"
+            - name: PHPLDAPADMIN_HTTPS
+              value: "false"
+          resources: 
+            limits: 
+              cpu: 200m
+              memory: 256Mi
+            requests: 
+              cpu: 100m
+              memory: 128Mi
+          livenessProbe: 
+            httpGet: 
+              path: "/"
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 10
+          readinessProbe: 
+            httpGet: 
+              path: "/"
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always

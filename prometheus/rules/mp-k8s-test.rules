@@ -1,0 +1,29 @@
+groups:
+    - name: mp-k8s-test
+      rules:
+      - alert: PodDownCount
+        expr: kube_deployment_spec_replicas != kube_deployment_status_replicas_available
+        for: 1m
+        labels:
+          service_name: mp-k8s-test
+          level: warning
+        annotations:
+          description: '【{{ $labels.namespace }}/{{ $labels.deployment }}】pod is down. value:{{ $value }}'
+          #summary: '【{{ $labels.namespace }}/{{ $labels.deployment }}】pod is down. value:{{ $value }}'
+      - alert: PodHPAUsage
+        expr: (avg by (hpa, namespace) (kube_hpa_status_current_replicas{} / kube_hpa_spec_max_replicas{})) * 100 > 80
+        for: 1m
+        labels:
+          service_name: mp-k8s-test
+          level: warning
+        annotations:
+          description: '【{{ $labels.namespace }}/{{ $labels.hpa }}】HPA Usage > 80%  value:{{ $value }}'
+     # - alert: KubeDeploymentUnavailable
+     #   expr: (kube_deployment_status_replicas_unavailable / kube_deployment_spec_replicas) * 100 >= 50
+     #   for: 1m
+     #   labels:
+     #     service_name: mp-k8s-test
+     #     level: warning
+     #   annotations:
+     #     description: '{{ $labels.deployment }}的不可用容器超过50%（当前：{{ $value }}%），请及时关注'
+     #     summary: '{{ $labels.deployment }}的不可用容器超过50%（当前：{{ $value }}%），请及时关注'

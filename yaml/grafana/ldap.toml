@@ -1,0 +1,26 @@
+[[servers]]
+host = "10.10.100.172"
+port = 389
+use_ssl = false
+start_tls = false
+ssl_skip_verify = false
+bind_dn = "cn=ldap,cn=admin,dc=kgcs,dc=local"
+bind_password = 'ldap,0524'
+search_filter = "(cn=%s)"
+search_base_dns = ["ou=users,dc=kgcs,dc=local"]
+group_search_base_dns = ["ou=groups,dc=kgcs,dc=local"]
+[servers.attributes]
+name = "givenName"
+surname = "sn"
+username = "cn"
+member_of = "cn"
+email =  "email"
+[[servers.group_mappings]]
+group_dn = "cn=admin,ou=groups,dc=kgcs,dc=local"
+org_role = "Admin"
+[[servers.group_mappings]]
+group_dn = "ou=users,dc=kgcs,dc=local"
+org_role = "Editor"
+[[servers.group_mappings]]
+group_dn = "*"
+org_role = "Admin"

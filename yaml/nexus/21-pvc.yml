@@ -1,0 +1,15 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  annotations:
+    volume.beta.kubernetes.io/storage-class: alicloud-disk-efficiency
+  name: {{.name}}-data-big
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "300Gi"
+{{ if index . "volume_name" }}
+  volumeName: {{.volume_name}}
+{{ end }}

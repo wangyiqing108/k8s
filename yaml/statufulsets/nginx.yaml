@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: 2019-01-03T08:43:54Z
+  generation: 2
+  name: nginx-statefulset
+  namespace: ops
+  resourceVersion: "39848686"
+  selfLink: /apis/apps/v1/namespaces/ops/statefulsets/nginx-statefulset
+  uid: b3887cb2-0f33-11e9-ab18-00163e0ee499
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 7
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: nginx-statefulset
+  serviceName: ""
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-statefulset
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx-statefulset
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - image: docker.io/nginx:latest
+        imagePullPolicy: Always
+        name: nginx
+        ports:
+        - containerPort: 80
+          name: nginx
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+status:
+  collisionCount: 0
+  currentReplicas: 7
+  currentRevision: nginx-statefulset-5c995475f7
+  observedGeneration: 2
+  readyReplicas: 7
+  replicas: 7
+  updateRevision: nginx-statefulset-5c995475f7

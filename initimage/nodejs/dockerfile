@@ -1,4 +1,4 @@
-FROM /base/centos:7.4
+FROM hub.bbobo.com/base/centos:7.4
 ENV NVM_DIR /root/.nvm
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash \
     && source $NVM_DIR/nvm.sh \

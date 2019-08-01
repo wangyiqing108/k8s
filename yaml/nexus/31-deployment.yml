@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.name}}
+  labels:
+    app: {{.name}}
+spec:
+  selector:
+    matchLabels:
+      app: {{.name}}
+  template:
+    metadata:
+      labels:
+        app: {{.name}}
+    spec:
+      initContainers:
+      - name: {{.name}}-init-data
+        image: "busybox:latest"
+        imagePullPolicy: "IfNotPresent"
+        command:
+          - chown
+          - -R
+          - 200:200
+          - /sonatype-work
+        volumeMounts:
+        - name: data
+          mountPath: /sonatype-work
+      containers:
+      - name: {{.name}}
+        image: "sonatype/nexus:2.14.8"
+        imagePullPolicy: "IfNotPresent"
+        env:
+          - name: JAVA_OPTS
+            value: -Dmail.smtp.ssl.trust=* -server -Djava.net.preferIPv4Stack=true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+
+        volumeMounts:
+        - name: data
+          mountPath: /sonatype-work
+      volumes:
+      - name: data
+        persistentVolumeClaim: 
+          claimName: {{.name}}-data-big
