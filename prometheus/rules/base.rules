@@ -1,0 +1,43 @@
+groups:
+    - name: base-monitor-rule
+      rules:
+      - alert: NodeCpuUsage
+        expr: (100 - (avg by (instance) (rate(node_cpu{job=~".*",mode="idle"}[2m])) * 100)) > 35
+        for: 2m
+        labels:
+          service_name: mp-videovv-count-consumer
+          level: warning
+        annotations:
+          description: "{{$labels.instance}}: CPU usage is above 35% (current value is: {{ $value }})"
+      - alert: NodeMemUsage
+        expr: avg by (instance)((1- (node_memory_MemAvailable / node_memory_MemTotal)) * 100) > 60
+        for: 2m
+        labels:
+          service_name: mp-videovv-count-consumer
+          level: warning
+        annotations:
+          description: "{{$labels.instance}}: MEM usage is above 60% (current value is: {{ $value }})"
+      - alert: NodeDiskUsage
+        expr: (1 - node_filesystem_free{fstype!="rootfs",mountpoint!="",mountpoint!~"/(run|var|sys|dev).*"} / node_filesystem_size) * 100 > 80
+        for: 2m
+        labels:
+          service_name: mp-videovv-count-consumer
+          level: warning
+        annotations:
+          description: "{{$labels.instance}}: Disk usage is above 80% (current value is: {{ $value }})"
+      - alert: NodeFDUsage
+        expr: avg by (instance) (node_filefd_allocated{} / node_filefd_maximum{}) * 100 > 60
+        for: 2m
+        labels:
+          service_name: mp-videovv-count-consumer
+          level: warning
+        annotations:
+          description: "{{$labels.instance}}: File Descriptor usage is above 60% (current value is: {{ $value }})"
+      - alert: NodeAgentStatus
+        expr: avg by (instance) (up{}) == 0
+        for: 2m
+        labels:
+          service_name: mp-videovv-count-consumer
+          level: warning
+        annotations:
+          description: "{{$labels.instance}}: Node Agent is down (current value is: {{ $value }})"
