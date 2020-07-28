@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  labels:
+    jobLabel: process-exporter
+    app: process-exporter
+    release: ack-prometheus-operator
+  name: process-exporter
+  namespace: monitoring
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 9256
+    protocol: TCP
+    targetPort: 9256
+  selector:
+    app: process-exporter
+  sessionAffinity: None
+  type: ClusterIP

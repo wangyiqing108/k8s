@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  generation: 1
+  labels:
+    app: ack-prometheus-operator-process-exporter
+    #chart: ack-prometheus-operator-5.7.1
+    #heritage: Tiller
+    release: ack-prometheus-operator
+  name: ack-prometheus-operator-process-exporter
+  namespace: monitoring
+spec:
+  endpoints:
+  - port: metrics
+  jobLabel: jobLabel
+  selector:
+    matchLabels:
+      app: process-exporter 
+      release: ack-prometheus-operator

@@ -1,0 +1,59 @@
+apiVersion: apps/v1beta2
+kind: DaemonSet
+metadata:
+  labels:
+    app: process-exporter
+    jobLabel: process-exporter
+    release: ack-prometheus-operator
+  name: process-exporter
+  namespace: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: process-exporter
+      release: ack-prometheus-operator
+  template:
+    metadata:
+      labels:
+        app: process-exporter
+        jobLabel: process-exporter
+        release: ack-prometheus-operator
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - image: juestnow/process-exporter:v0.5.0
+        args:
+        - "-procfs=/host/proc"
+        - "-config.path=/etc/process-exporter/process-exporter.yaml"
+        name: process-exporter
+        ports:
+        - name: http
+          containerPort: 9256
+          hostPort: 9256
+        resources:
+          requests:
+            memory: 50Mi
+            cpu: 256m
+                                                                                                                                    2,13          Top
+            memory: 50Mi
+            cpu: 256m
+          limits:
+            memory: 200Mi
+            cpu: 512m
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/process-exporter
+        - name: proc
+          readOnly:  true
+          mountPath: /host/proc
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: config-volume
+          configMap:
+            name: process-config
